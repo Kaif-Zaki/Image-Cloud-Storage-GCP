@@ -5,3 +5,9 @@ build
 .DS_Store
 .json
 target/classes/*.json
+echo "src/main/resources/*.json" >> .gitignore
+echo ".env" >> .gitignore
+echo "node_modules" >> .gitignore
+echo ".DS_Store" >> .gitignore
+git add .gitignore
+git commit -m "Add .gitignore to block secrets"
