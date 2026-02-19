@@ -7,6 +7,6 @@ spring:
       max-request-size: 10MB
 
 gcp:
-  project-id: ###
-  credentials-location: ###
-  bucket-id: ####
+  project-id:
+  credentials-location:
+  bucket-id:
