@@ -1,6 +1,7 @@
 package lk.ijse.eca.cloud_storage.controller;
 
 import java.io.IOException;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class ImageController {
     public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
         try {
             Resource resource = storageService.load(filename);
-            String contentType = Files.probeContentType(resource.getFile().toPath());
+            String contentType = URLConnection.guessContentTypeFromStream(resource.getInputStream());
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType != null ? contentType : "application/octet-stream"))
                     .body(resource);
