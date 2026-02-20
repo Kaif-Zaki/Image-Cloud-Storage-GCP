@@ -4,3 +4,10 @@ dist
 build
 .DS_Store
 .json
+
+# build output
+target/
+
+# secrets
+*.json
+*.key
