@@ -18,8 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Primary
@@ -90,5 +89,98 @@ public class CloudStorageService implements StorageService {
             storage.delete(blob.getBlobId());
 
 
+    }
+
+    @Override
+    public List<Map<String, String>> uploadMultiple(List<MultipartFile> files) {
+        List<Map<String, String>> results = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            Map<String, String> result = new HashMap<>();
+            try {
+                if (file.isEmpty()) {
+                    result.put("originalFilename", file.getOriginalFilename());
+                    result.put("status", "failed");
+                    result.put("error", "File is empty");
+                    results.add(result);
+                    continue;
+                }
+
+                String contentType = file.getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
+                    result.put("originalFilename", file.getOriginalFilename());
+                    result.put("status", "failed");
+                    result.put("error", "Only image files are allowed");
+                    results.add(result);
+                    continue;
+                }
+
+                String originalFilename = file.getOriginalFilename();
+                String extension = "";
+                if (originalFilename != null && originalFilename.contains(".")) {
+                    extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                }
+
+                String savedFilename = UUID.randomUUID() + extension;
+
+                BlobId blobId = BlobId.of(bucketId, savedFilename);
+                BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+                storage.createFrom(blobInfo, file.getInputStream());
+
+                result.put("originalFilename", originalFilename);
+                result.put("savedFilename", savedFilename);
+                result.put("status", "success");
+                results.add(result);
+
+            } catch (IOException e) {
+                result.put("originalFilename", file.getOriginalFilename());
+                result.put("status", "failed");
+                result.put("error", "Failed to store file: " + e.getMessage());
+                results.add(result);
+            }
+        }
+
+        return results;
+    }
+
+    @Override
+    public Map<String, Resource> loadMultiple(List<String> filenames) {
+        Map<String, Resource> results = new HashMap<>();
+
+        for (String filename : filenames) {
+            try {
+                byte[] fileContent = storage.readAllBytes(bucketId, filename);
+                if (fileContent != null) {
+                    results.put(filename, new ByteArrayResource(fileContent));
+                } else {
+                    results.put(filename, null);
+                }
+            } catch (Exception e) {
+                results.put(filename, null);
+            }
+        }
+
+        return results;
+    }
+
+    @Override
+    public Map<String, Boolean> deleteMultiple(List<String> filenames) {
+        Map<String, Boolean> results = new HashMap<>();
+
+        for (String filename : filenames) {
+            try {
+                Blob blob = storage.get(bucketId, filename);
+                if (blob != null) {
+                    storage.delete(bucketId, filename);
+                    results.put(filename, true);
+                } else {
+                    results.put(filename, false);
+                }
+            } catch (Exception e) {
+                results.put(filename, false);
+            }
+        }
+
+        return results;
     }
 }

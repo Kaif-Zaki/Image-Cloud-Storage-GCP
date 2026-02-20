@@ -3,10 +3,10 @@ spring:
     name: cloud-storage-in-action
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 gcp:
   project-id: zaki-01-486806
-  credentials-location: /zaki-01-486806-0419c5f154ec.json
-  bucket-id:  eca-bucket-1
+  credentials-location: /zaki-01-486806-f5e0ad722379.json
+  bucket-id: gcp-bucket-image
