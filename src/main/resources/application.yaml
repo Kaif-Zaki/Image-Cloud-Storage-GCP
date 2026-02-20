@@ -7,6 +7,6 @@ spring:
       max-request-size: 100MB
 
 gcp:
-  project-id: zaki-01-486806
-  credentials-location: /zaki-01-486806-f5e0ad722379.json
-  bucket-id: gcp-bucket-image
+  project-id: ##
+  credentials-location: ##
+  bucket-id: ##
