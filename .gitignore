@@ -11,3 +11,7 @@ target/
 # secrets
 *.json
 *.key
+
+# Ignore Google Cloud service account files
+src/main/resources/*.json
+target/classes/*.json
