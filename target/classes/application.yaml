@@ -8,5 +8,5 @@ spring:
 
 gcp:
   project-id: zaki-01-486806
-  credentials-location: /zaki-01-486806-f5e0ad722379.json
-  bucket-id: gcp-bucket-image
+  credentials-location: /zaki-01-486806-762ec8b740ec.json
+  bucket-id:  image-db-2003

@@ -9,4 +9,4 @@ spring:
 gcp:
   project-id: ##
   credentials-location: ##
-  bucket-id: ##
+  bucket-id:  ##

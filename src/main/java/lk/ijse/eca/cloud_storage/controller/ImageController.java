@@ -26,6 +26,13 @@ import lk.ijse.eca.cloud_storage.service.StorageService;
 
 @RestController
 @RequestMapping("/api/v1/images")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175"},
+             allowCredentials = "true",
+             allowedHeaders = "*",
+             methods = {org.springframework.web.bind.annotation.RequestMethod.GET,
+                       org.springframework.web.bind.annotation.RequestMethod.POST,
+                       org.springframework.web.bind.annotation.RequestMethod.DELETE,
+                       org.springframework.web.bind.annotation.RequestMethod.PUT})
 public class ImageController {
 
     private final StorageService storageService;
